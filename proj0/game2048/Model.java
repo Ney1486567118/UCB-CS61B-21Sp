@@ -114,11 +114,65 @@ public class Model extends Observable {
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
 
+        if (side != Side.NORTH) {
+            board.setViewingPerspective(side);
+        }
+
+        for (int col = 0; col < board.size(); col ++) {
+            boolean has_changed = process_col(col);
+            if (has_changed) {
+                changed = true;
+            }
+        }
+
+        board.setViewingPerspective(Side.NORTH);
+
+
         checkGameOver();
         if (changed) {
             setChanged();
         }
         return changed;
+    }
+
+    public boolean process_col(int col) {
+        boolean[] merged = new boolean[board.size()];
+        boolean changed = false;
+
+        for (int row = board.size() - 1; row >= 0; row --) {
+            Tile t = board.tile(col, row);
+
+            if (t != null) {
+                int goal_row = move_to_row(merged, col, row);
+
+                if (board.move(col, goal_row, t)) {
+                    score += board.tile(col, goal_row).value();
+                    merged[goal_row] = true;
+                }
+
+                if (row != goal_row) {
+                    changed = true;
+                }
+            }
+        }
+
+        return changed;
+    }
+
+    public int move_to_row(boolean[] merged, int col, int row) {
+        int goal_row = row;
+        for (int r = row + 1; r < board.size(); r ++) {
+            if (board.tile(col, r) == null) {
+                goal_row = r;
+            } else if (board.tile(col, r).value() == board.tile(col, row).value() && merged[r] == false) {
+                goal_row = r;
+                return goal_row;
+            } else {
+                return goal_row;
+            }
+        }
+
+        return goal_row;
     }
 
     /** Checks if the game is over and sets the gameOver variable
