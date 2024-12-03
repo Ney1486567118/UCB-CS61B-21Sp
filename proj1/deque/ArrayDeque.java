@@ -121,7 +121,10 @@ public class ArrayDeque<T> {
         } else {
             T firstItem = items[head];
             items[head] = null;
-            head = (head + 1) % items.length;
+            if (size > 1) {
+                head = (head + 1) % items.length;
+            }
+
 
             size -= 1;
             return firstItem;
