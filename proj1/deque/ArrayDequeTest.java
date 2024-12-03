@@ -110,21 +110,43 @@ public class ArrayDequeTest {
     /* Add large number of elements to deque; check if order is correct. */
     public void bigadequeTest() {
 
-        System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
+        // System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 
         ArrayDeque<Integer> ad1 = new ArrayDeque<Integer>();
         for (int i = 0; i < 1000000; i++) {
             ad1.addLast(i);
         }
 
-        for (double i = 0; i < 500000; i++) {
+        for (double i = 0; i < 1000000; i++) {
+            if (i % 2 == 0) {
+                assertEquals("Should have the same value", i / 2, (double) ad1.removeFirst(), 0.0);
+            } else {
+                assertEquals("Should have the same value", 1000000 - (i + 1) / 2, (double) ad1.removeLast(), 0.0);
+            }
+        }
+    }
+
+    @Test
+    public void fillEmptyFill() {
+        ArrayDeque<Integer> ad1 = new ArrayDeque<Integer>();
+        for (int i = 0; i < 16; i++) {
+            ad1.addLast(i);
+        }
+
+        for (double i = 0; i < 16; i++) {
             assertEquals("Should have the same value", i, (double) ad1.removeFirst(), 0.0);
         }
 
-        for (double i = 999999; i > 500000; i--) {
-            assertEquals("Should have the same value", i, (double) ad1.removeLast(), 0.0);
+        System.out.println(ad1.isEmpty());
+        System.out.println(ad1.get(0));
+        System.out.println(ad1.head);
+        System.out.println(ad1.last);
+        for (int i = 0; i < 8; i++) {
+            ad1.addLast(i);
         }
 
-
+        for (double i = 0; i < 8; i++) {
+            assertEquals("Should have the same value", i, (double) ad1.removeFirst(), 0.0);
+        }
     }
 }

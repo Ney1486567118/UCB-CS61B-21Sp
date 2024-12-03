@@ -3,14 +3,14 @@ package deque;
 public class ArrayDeque<T> {
     private T[] items;
     private int size;
-    private int head;
-    private int last;
+    public int head;
+    public int last;
 
     public ArrayDeque() {
         items = (T[]) new Object[1];
         size = 0;
-        head = 0;
-        last = 0;
+        head = 0;  // index of the first item
+        last = 0;  // index of the last item
     }
 
     public void resize(int capacity) {
@@ -22,7 +22,7 @@ public class ArrayDeque<T> {
             }
 
             for (int i = 0; i < head; i ++) {
-                a[size - head] = items[i];
+                a[size - head + i] = items[i];
             }
         } else {
             for (int i = head; i <= last; i ++) {
@@ -45,7 +45,7 @@ public class ArrayDeque<T> {
         }
 
         if (size == 0) {
-            items[0] = item;
+            items[head] = item;
         } else {
             if (head == 0) {
                 head = items.length - 1;
@@ -64,7 +64,7 @@ public class ArrayDeque<T> {
         }
 
         if (size == 0) {
-            items[0] = item;
+            items[last] = item;
         } else {
             last = (last + 1) % items.length;
             items[last] = item;
@@ -112,7 +112,7 @@ public class ArrayDeque<T> {
     }
 
     public T removeFirst() {
-        if ((size < items.length / 4) && (size > 4)) {
+        if ((size < items.length / 4) && (items.length > 4)) {
             resize(items.length / 4);
         }
 
