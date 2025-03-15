@@ -114,23 +114,23 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
-    public T getRecursion(int index) {
+    public T getRecursive(int index) {
         if (index > size - 1 || index < 0) {
             return null;
         } else {
             if (index == 0) {
                 return sentinel.next.item;
             } else {
-                return getRecursionHelper(sentinel.next.next, index - 1);
+                return getRecursiveHelper(sentinel.next.next, index - 1);
             }
         }
     }
 
-    private T getRecursionHelper(Node curr, int index) {
+    private T getRecursiveHelper(Node curr, int index) {
         if (index == 0) {
             return curr.item;
         } else {
-            return getRecursionHelper(curr.next, index - 1);
+            return getRecursiveHelper(curr.next, index - 1);
         }
     }
 
