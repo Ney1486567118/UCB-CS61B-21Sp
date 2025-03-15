@@ -15,7 +15,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         last = 0;  // index of the last item
     }
 
-    public void resize(int capacity) {
+    private void resize(int capacity) {
         T[] a = (T[]) new Object[capacity];
 
         if (head > last) {
@@ -192,36 +192,24 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         }
     }
 
-
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ArrayDeque) {
-            ArrayDeque ad = (ArrayDeque) o;
-            if (ad.size() != this.size()) {
+        if (this == o) {
+            return true;
+        }
+        if (o instanceof Deque) {
+            Deque d = (Deque) o;
+            if (d.size() != this.size()) {
                 return false;
             }
 
             for (int i = 0; i < this.size(); i++) {
-                if (ad.get(i) != this.get(i)) {
+                if (d.get(i) != this.get(i)) {
                     return false;
                 }
             }
             return true;
         }
         return false;
-    }
-
-    public static void main(String[] args) {
-        ArrayDeque<Integer> ad1 = new ArrayDeque<>();
-        ad1.addFirst(5);
-        ad1.addFirst(25);
-        ad1.addFirst(15);
-
-        ArrayDeque<Integer> ad2 = new ArrayDeque<>();
-        ad2.addFirst(5);
-        ad2.addFirst(25);
-        ad2.addFirst(15);
-
-        System.out.println(ad1.equals(ad2));
     }
 }
