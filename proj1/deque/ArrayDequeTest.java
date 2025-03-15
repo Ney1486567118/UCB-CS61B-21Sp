@@ -139,8 +139,6 @@ public class ArrayDequeTest {
 
         System.out.println(ad1.isEmpty());
         System.out.println(ad1.get(0));
-        System.out.println(ad1.head);
-        System.out.println(ad1.last);
         for (int i = 0; i < 8; i++) {
             ad1.addLast(i);
         }

@@ -1,10 +1,12 @@
 package deque;
 
-public class ArrayDeque<T> implements Deque<T>{
+import java.util.Iterator;
+
+public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] items;
     private int size;
-    public int head;
-    public int last;
+    private int head;
+    private int last;
 
     public ArrayDeque() {
         items = (T[]) new Object[1];
@@ -17,15 +19,15 @@ public class ArrayDeque<T> implements Deque<T>{
         T[] a = (T[]) new Object[capacity];
 
         if (head > last) {
-            for (int i = head; i < size; i ++) {
+            for (int i = head; i < size; i++) {
                 a[i - head] = items[i];
             }
 
-            for (int i = 0; i < head; i ++) {
+            for (int i = 0; i < head; i++) {
                 a[size - head + i] = items[i];
             }
         } else {
-            for (int i = head; i <= last; i ++) {
+            for (int i = head; i <= last; i++) {
                 a[i - head] = items[i];
             }
         }
@@ -84,25 +86,24 @@ public class ArrayDeque<T> implements Deque<T>{
     public void printDeque() {
         int printed = 0;
         if (head > last) {
-            for (int i = head; i < size; i ++) {
-                printItem(printed, size, i);
-                printed ++;
+            for (int i = head; i < size; i++) {
+                printItem(printed, i);
+                printed++;
             }
 
-            for (int i = 0; i < head; i ++) {
-                printItem(printed, size, i);
-                printed ++;
+            for (int i = 0; i < head; i++) {
+                printItem(printed, i);
+                printed++;
             }
         } else {
-            for (int i = head; i <= last; i ++) {
-                printItem(printed, size, i);
-                printed ++;
+            for (int i = head; i <= last; i++) {
+                printItem(printed, i);
+                printed++;
             }
         }
-
     }
 
-    private void printItem(int printed, int size, int i) {
+    private void printItem(int printed, int i) {
         if (printed == size - 1) {
             System.out.print(items[i]);
             System.out.println();
@@ -163,6 +164,60 @@ public class ArrayDeque<T> implements Deque<T>{
             return null;
         } else {
             return items[(head + index) % items.length];
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new ArrayDequeIterator();
+    }
+
+    private class ArrayDequeIterator implements Iterator<T> {
+        private int index;
+
+        public ArrayDequeIterator() {
+            index = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        @Override
+        public T next() {
+            T returnItem = get(index);
+            index++;
+            return returnItem;
+        }
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof ArrayDeque ad) {
+            if (ad.size() != this.size()) {
+                return false;
+            }
+
+            for (int i = 0; i < this.size(); i++) {
+                if (ad.get(i) != this.get(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public static void main(String args[]) {
+        ArrayDeque<Integer> ad = new ArrayDeque<>();
+        ad.addFirst(5);
+        ad.addFirst(25);
+        ad.addFirst(15);
+
+        for (int i : ad) {
+            System.out.println(i);
         }
     }
 }

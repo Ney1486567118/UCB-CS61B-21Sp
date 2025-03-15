@@ -1,12 +1,14 @@
 package deque;
 
-public class LinkedListDeque<T> implements Deque<T>{
+import java.util.Iterator;
+
+public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
     private class Node {
         T item;
         Node prev;
         Node next;
 
-        public Node(T i, Node p, Node n) {
+        Node(T i, Node p, Node n) {
             item = i;
             prev = p;
             next = n;
@@ -102,17 +104,17 @@ public class LinkedListDeque<T> implements Deque<T>{
             return null;
         } else {
             Node curr = sentinel.next;
-            int curr_index = 0;
-            while (curr_index < index) {
+            int currIndex = 0;
+            while (currIndex < index) {
                 curr = curr.next;
-                curr_index ++;
+                currIndex++;
             }
 
             return curr.item;
         }
     }
 
-    public T getRecursion (int index) {
+    public T getRecursion(int index) {
         if (index > size - 1 || index < 0) {
             return null;
         } else {
@@ -129,6 +131,48 @@ public class LinkedListDeque<T> implements Deque<T>{
             return curr.item;
         } else {
             return getRecursionHelper(curr.next, index - 1);
+        }
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+        return new LinkedListDequeIterator();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof LinkedListDeque lld) {
+            if (lld.size() != this.size()) {
+                return false;
+            }
+
+            for (int i = 0; i < this.size(); i++) {
+                if (lld.get(i) != this.get(i)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private class LinkedListDequeIterator implements Iterator<T> {
+        private int index;
+
+        public LinkedListDequeIterator() {
+            index = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        @Override
+        public T next() {
+            T returnItem = get(index);
+            index++;
+            return returnItem;
         }
     }
 }
