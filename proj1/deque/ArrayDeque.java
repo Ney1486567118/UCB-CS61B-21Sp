@@ -175,7 +175,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private class ArrayDequeIterator implements Iterator<T> {
         private int index;
 
-        public ArrayDequeIterator() {
+        ArrayDequeIterator() {
             index = 0;
         }
 
@@ -211,7 +211,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
         return false;
     }
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         ArrayDeque<Integer> ad1 = new ArrayDeque<>();
         ad1.addFirst(5);
         ad1.addFirst(25);

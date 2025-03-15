@@ -139,6 +139,26 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
         return new LinkedListDequeIterator();
     }
 
+    private class LinkedListDequeIterator implements Iterator<T> {
+        private int index;
+
+        LinkedListDequeIterator() {
+            index = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index < size;
+        }
+
+        @Override
+        public T next() {
+            T returnItem = get(index);
+            index++;
+            return returnItem;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o instanceof LinkedListDeque) {
@@ -155,25 +175,5 @@ public class LinkedListDeque<T> implements Deque<T>, Iterable<T> {
             return true;
         }
         return false;
-    }
-
-    private class LinkedListDequeIterator implements Iterator<T> {
-        private int index;
-
-        public LinkedListDequeIterator() {
-            index = 0;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return index < size;
-        }
-
-        @Override
-        public T next() {
-            T returnItem = get(index);
-            index++;
-            return returnItem;
-        }
     }
 }
