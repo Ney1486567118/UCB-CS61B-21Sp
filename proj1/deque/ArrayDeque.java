@@ -195,7 +195,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     @Override
     public boolean equals(Object o) {
-        if (o instanceof ArrayDeque ad) {
+        if (o instanceof ArrayDeque) {
+            ArrayDeque ad = (ArrayDeque) o;
             if (ad.size() != this.size()) {
                 return false;
             }
@@ -211,13 +212,16 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     public static void main(String args[]) {
-        ArrayDeque<Integer> ad = new ArrayDeque<>();
-        ad.addFirst(5);
-        ad.addFirst(25);
-        ad.addFirst(15);
+        ArrayDeque<Integer> ad1 = new ArrayDeque<>();
+        ad1.addFirst(5);
+        ad1.addFirst(25);
+        ad1.addFirst(15);
 
-        for (int i : ad) {
-            System.out.println(i);
-        }
+        ArrayDeque<Integer> ad2 = new ArrayDeque<>();
+        ad2.addFirst(5);
+        ad2.addFirst(25);
+        ad2.addFirst(15);
+
+        System.out.println(ad1.equals(ad2));
     }
 }
