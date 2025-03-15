@@ -37,7 +37,7 @@ public class ArrayDequeTest {
 
         // System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
 
-        ArrayDeque<Integer> ad1 = new ArrayDeque<Integer>();
+        ArrayDeque<Integer> ad1 = new ArrayDeque<>();
         // should be empty
         assertTrue("ad1 should be empty upon initialization", ad1.isEmpty());
 
