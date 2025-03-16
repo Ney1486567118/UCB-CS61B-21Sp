@@ -11,8 +11,8 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
 
     public ArrayDeque() {
         items = (T[]) new Object[1];
-        size = 0;
-        capacity = 1;
+        size = 0;  // record the amount of items
+        capacity = 1;  // record the capacity of the deque
         head = 0;  // index of the first item
         tail = 0;  // index of the tail item
     }
