@@ -5,76 +5,101 @@ import java.util.Iterator;
 public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     private T[] items;
     private int size;
+    private int capacity;
     private int head;
-    private int last;
+    private int tail;
 
     public ArrayDeque() {
         items = (T[]) new Object[1];
         size = 0;
+        capacity = 1;
         head = 0;  // index of the first item
-        last = 0;  // index of the last item
-    }
-
-    private void resize(int capacity) {
-        T[] a = (T[]) new Object[capacity];
-
-        if (head > last) {
-            for (int i = head; i < size; i++) {
-                a[i - head] = items[i];
-            }
-
-            for (int i = 0; i < head; i++) {
-                a[size - head + i] = items[i];
-            }
-        } else {
-            for (int i = head; i <= last; i++) {
-                a[i - head] = items[i];
-            }
-        }
-
-        items = a;
-        head = 0;
-        if (size > 0) {
-            last = size - 1;
-        } else {
-            last = 0;
-        }
+        tail = 0;  // index of the tail item
     }
 
     @Override
     public void addFirst(T item) {
-        if (size == items.length) {
+        if (isFull()) {
             resize(size * 2);
         }
 
-        if (size == 0) {
-            items[head] = item;
-        } else {
-            if (head == 0) {
-                head = items.length - 1;
-            } else {
-                head -= 1;
-            }
-            items[head] = item;
-        }
-
-        size += 1;
+        int newHead = (head - 1 + capacity) % capacity;
+        items[newHead] = item;
+        head = newHead;
+        size++;
     }
 
     @Override
     public void addLast(T item) {
-        if (size == items.length) {
+        if (isFull()) {
             resize(size * 2);
         }
 
-        if (size == 0) {
-            items[last] = item;
-        } else {
-            last = (last + 1) % items.length;
-            items[last] = item;
+        int newTail = (tail + 1) % capacity;
+        items[newTail] = item;
+        tail = newTail;
+        size++;
+    }
+
+    @Override
+    public T removeFirst() {
+        if (isEmpty()) {
+            return null;
         }
 
-        size += 1;
+        T removedItem = items[head];
+
+        head = (head + 1) % capacity;
+        size--;
+
+        // Check if the deque is too empty
+        if (tooEmpty()) {
+            resize(capacity / 4);
+        }
+        return removedItem;
+    }
+
+    @Override
+    public T removeLast() {
+        if (isEmpty()) {
+            return null;
+        }
+        T removedItem = items[tail];
+
+        tail = (tail - 1 + capacity) % capacity;
+        size--;
+
+        // Check if the deque is too empty
+        if (tooEmpty()) {
+            resize(capacity / 4);
+        }
+        return removedItem;
+    }
+
+    private void resize(int newCapacity) {
+        T[] a = (T[]) new Object[newCapacity];
+
+        for (int i = 0; i < size; i++) {
+            a[i] = items[(head + i) % capacity];
+        }
+
+        items = a;
+        head = 0;
+        tail = head + size - 1;
+        capacity = newCapacity;
+    }
+
+    /* Returns whether the deque is full */
+    private boolean isFull() {
+        return size == capacity;
+    }
+
+    // Returns whether more than 75% of the deque is empty
+    private boolean tooEmpty() {
+        if (size == 0) {
+            return false;
+        }
+        return size <= capacity / 4;
     }
 
     @Override
@@ -85,7 +110,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     @Override
     public void printDeque() {
         int printed = 0;
-        if (head > last) {
+        if (head > tail) {
             for (int i = head; i < size; i++) {
                 printItem(printed, i);
                 printed++;
@@ -96,7 +121,7 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
                 printed++;
             }
         } else {
-            for (int i = head; i <= last; i++) {
+            for (int i = head; i <= tail; i++) {
                 printItem(printed, i);
                 printed++;
             }
@@ -113,58 +138,11 @@ public class ArrayDeque<T> implements Deque<T>, Iterable<T> {
     }
 
     @Override
-    public T removeFirst() {
-        if ((size < items.length / 4) && (items.length > 4)) {
-            resize(items.length / 4);
-        }
-
-        if (size == 0) {
-            return null;
-        } else {
-            T firstItem = items[head];
-            items[head] = null;
-            if (size > 1) {
-                head = (head + 1) % items.length;
-            }
-
-
-            size -= 1;
-            return firstItem;
-        }
-    }
-
-    @Override
-    public T removeLast() {
-        if ((size < items.length / 4) && (size > 4)) {
-            resize(items.length / 4);
-        }
-
-        if (size == 0) {
-            return null;
-        } else {
-            T lastItem = items[last];
-            items[last] = null;
-
-            if (last == 0) {
-                if (size > 1) {
-                    last = items.length - 1;
-                }
-            } else {
-                last -= 1;
-            }
-
-            size -= 1;
-            return lastItem;
-        }
-    }
-
-    @Override
     public T get(int index) {
         if (index > size - 1 || index < 0) {
             return null;
-        } else {
-            return items[(head + index) % items.length];
         }
+        return items[(head + index) % capacity];
     }
 
     @Override
